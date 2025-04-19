@@ -233,6 +233,19 @@ import {
   
   import { CodeBlock } from "./ui/CodeBlock"
   
+  // Create a non-async version of the CodeBlock for any inline usage
+  // This will just be a placeholder since we pre-process code blocks
+  const StaticCodeBlock = ({ children, className, title }: { children: string; className?: string; title?: string }) => {
+    return (
+      <div className="pre-rendered-code-block">
+        {/* This should never render directly - our preprocessor replaces these */}
+        <pre>
+          <code>{children}</code>
+        </pre>
+      </div>
+    );
+  };
+  
   // Export all components for MDX usage
   export const mdxComponents = {
     // Layout and Containers
@@ -288,7 +301,7 @@ import {
     Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,
   
     // Code Blocks
-    code: CodeBlock,
+    code: StaticCodeBlock,
     CodeBlock: CodeBlock,
     pre: (props: any) => {
       const child = props.children?.props;
@@ -299,5 +312,10 @@ import {
         </CodeBlock>
       );
     },
+    // Make sure links open in a new tab
+    a: ({ href, children }: { href: string; children: React.ReactNode }) => (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    ),
   }
-  

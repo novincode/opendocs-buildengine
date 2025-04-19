@@ -48,6 +48,7 @@ fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
 // Convert each .mdx file to HTML
 (async () => {
+    // Process files
     for (const file of mdxFiles) {
         const rel = path.relative(TEMP_DIR, file);
         const outPath = path.join(OUTPUT_DIR, rel.replace(/\.mdx$/, '.html'));
