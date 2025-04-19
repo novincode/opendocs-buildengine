@@ -14,7 +14,7 @@ if (!DOCS_REPO) {
 }
 
 const TEMP_DIR = 'tempdocs';
-const OUTPUT_DIR = path.join(process.cwd(), DOCS_REPO);
+const OUTPUT_DIR = path.join(process.cwd(), "htmlrepo", DOCS_REPO); // Output to htmlrepo/${DOCS_REPO}
 
 // Clean up tempdocs and output dir if they exist
 if (fs.existsSync(TEMP_DIR)) fs.rmSync(TEMP_DIR, { recursive: true, force: true });
@@ -51,11 +51,10 @@ fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     for (const file of mdxFiles) {
         const rel = path.relative(TEMP_DIR, file);
         const outPath = path.join(OUTPUT_DIR, rel.replace(/\.mdx$/, '.html'));
-        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        fs.mkdirSync(path.dirname(outPath), { recursive: true }); // Ensure output subdirs exist
         const mdxSource = fs.readFileSync(file, 'utf8');
         const { content, data } = matter(mdxSource);
         const html = await renderMdxToHtml(content);
-        // const fullHtml = `<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>${data.title ?? path.basename(file, '.mdx')}</title>\n  </head>\n  <body>\n    ${html}\n  </body>\n</html>`;
         fs.writeFileSync(outPath, html);
         console.log(`✅ Built: ${outPath}`);
     }
