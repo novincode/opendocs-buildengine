@@ -1,0 +1,34 @@
+# This workflow builds docs for the target repo using repository_dispatch and pnpm caching
+name: Build Docs
+
+on:
+  repository_dispatch:
+    types: [rustdocs, godocs]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCS_REPO: ${{ github.event.action }}
+
+    steps:
+      - name: Checkout builder repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node and pnpm (with cache)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Clone target docs repo
+        run: git clone --depth=1 https://github.com/novincode/${{ env.DOCS_REPO }} tempdocs
+
+      - name: Build docs
+        run: pnpm build
