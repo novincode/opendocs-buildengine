@@ -27,6 +27,9 @@ jobs:
           version: 8
           run_install: true # Ensures pnpm is installed and available
 
+      - name: Add pnpm to PATH
+        run: echo "$(npm bin --global)" >> $GITHUB_PATH
+
       - name: Install dependencies
         run: pnpm install
 
