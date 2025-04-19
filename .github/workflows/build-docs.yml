@@ -15,23 +15,23 @@ jobs:
       - name: Checkout builder repo
         uses: actions/checkout@v4
 
-      - name: Setup Node and pnpm (with cache)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: pnpm
+    #   - name: Setup Node and pnpm (with cache)
+    #     uses: actions/setup-node@v4
+    #     with:
+    #       node-version: 20
+    #       cache: pnpm
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: true # Ensures pnpm is installed and available
+      # - name: Setup pnpm
+      #   uses: pnpm/action-setup@v2
+      #   with:
+      #     version: 8
+      #     run_install: true # Ensures pnpm is installed and available
 
-      - name: Add pnpm to PATH
-        run: echo "$(npm bin --global)" >> $GITHUB_PATH
+      # - name: Add pnpm to PATH
+      #   run: echo "$(npm bin --global)" >> $GITHUB_PATH
 
-      - name: Install dependencies
-        run: pnpm install
+      # - name: Install dependencies
+      #   run: pnpm install
 
       - name: Clone target docs repo
         run: git clone --depth=1 https://github.com/novincode/${{ env.DOCS_REPO }} tempdocs
