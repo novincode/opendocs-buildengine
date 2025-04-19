@@ -59,4 +59,6 @@ fs.mkdirSync(OUTPUT_DIR, { recursive: true });
         console.log(`✅ Built: ${outPath}`);
     }
     console.log('🎉 All docs built!');
+    // Remove tempdocs after building
+    if (fs.existsSync(TEMP_DIR)) fs.rmSync(TEMP_DIR, { recursive: true, force: true });
 })();

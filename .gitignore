@@ -1,7 +1,8 @@
 node_modules
 dist
 .env
-tempdocs/
-htmlrepo/
 .DS_Store
 **/.DS_Store
+
+htmlrepo/*
+!htmlrepo/.gitkeep
