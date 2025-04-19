@@ -46,6 +46,8 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Commit and push HTML to opendocs-html
+        env: 
+            HTML_PUSH_TOKEN: ${{ secrets.HTML_PUSH_TOKEN }}
         run: |
           cd htmlrepo
           git config user.name "novincode-bot"
