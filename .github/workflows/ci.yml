@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm' # Use npm cache, not pnpm, to avoid pnpm not found error
+          cache: 'pnpm' # Use npm cache, not pnpm, to avoid pnpm not found error
 
       - name: Install pnpm
         run: npm install -g pnpm@8
