@@ -49,22 +49,13 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Commit and push HTML to opendocs-html
+        env:
+          HTML_PUSH_TOKEN: ${{ secrets.HTML_PUSH_TOKEN }}
         run: |
           cd htmlrepo
           git config user.name "novincode-bot"
           git config user.email "bot@novincode.com"
+          git remote set-url origin https://x-access-token:${HTML_PUSH_TOKEN}@github.com/novincode/opendocs-html.git
           git add .
           git commit -m "📝 Update docs for ${{ env.DOCS_REPO }} ($(date))" || echo "No changes to commit"
           git push origin main
-
-    #   - name: Push HTML to target repo
-    #     env:
-    #       PUSH_HTML_TOKEN: ${{ secrets.PUSH_HTML_TOKEN }}
-    #     run: |
-    #       cd rustdocs
-    #       git init
-    #       git remote add origin https://x-access-token:${PUSH_HTML_TOKEN}@github.com/novincode/opendocs-html.git
-    #       git checkout -b main
-    #       git add .
-    #       git commit -m "Update docs [skip ci]"
-    #       git push --force origin main
