@@ -31,13 +31,10 @@ jobs:
       - name: Clone target docs repo
         run: git clone --depth=1 https://github.com/novincode/${{ env.DOCS_REPO }} tempdocs
 
-      - name: Copy built HTML files
-        run: |
-          rm -rf htmlrepo/${{ env.DOCS_REPO }} # Clean old output
-          mkdir -p htmlrepo/${{ env.DOCS_REPO }}
-          cp -r ${{ env.DOCS_REPO }}/* htmlrepo/${{ env.DOCS_REPO }}
+      - name: Remove Old Docs
+        run: rm -rf htmlrepo
 
-          
+
       - name: Build docs
         run: pnpm build
 
