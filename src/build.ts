@@ -46,18 +46,25 @@ if (!mdxFiles.length) {
 
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-// Convert each .mdx file to HTML
+// Convert each .mdx file to HTML and extract metadata to JSON
 (async () => {
-    // Process files
     for (const file of mdxFiles) {
         const rel = path.relative(TEMP_DIR, file);
         const outPath = path.join(OUTPUT_DIR, rel.replace(/\.mdx$/, '.html'));
+        const jsonPath = path.join(OUTPUT_DIR, rel.replace(/\.mdx$/, '.json'));
         fs.mkdirSync(path.dirname(outPath), { recursive: true }); // Ensure output subdirs exist
         const mdxSource = fs.readFileSync(file, 'utf8');
         const { content, data } = matter(mdxSource);
+
+        // Write metadata JSON file
+        fs.writeFileSync(jsonPath, JSON.stringify(data ?? {}, null, 2));
+
+        // Render HTML
         const html = await renderMdxToHtml(content);
         fs.writeFileSync(outPath, html);
+
         console.log(`✅ Built: ${outPath}`);
+        console.log(`✅ Metadata: ${jsonPath}`);
     }
     console.log('🎉 All docs built!');
     // Remove tempdocs after building

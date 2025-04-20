@@ -49,12 +49,12 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           CLOUDFLARE_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
         run: |
-          echo "🔍 Scanning built HTML files in htmlrepo/${DOCS_REPO}"
+          echo "🔍 Scanning built HTML and JSON files in htmlrepo/${DOCS_REPO}"
 
           ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID}"
           NAMESPACE_ID="${CLOUDFLARE_NAMESPACE_ID}"
 
-          find htmlrepo/${DOCS_REPO} -name "*.html" | while read file; do
+          find htmlrepo/${DOCS_REPO} -name "*.html" -o -name "*.json" | while read file; do
             key=${file#htmlrepo/} # strip htmlrepo/ prefix
             safe_key=$(echo "$key" | sed 's/ /%20/g; s/\//%2F/g; s/\"/%22/g; s/#/%23/g; s/?/%3F/g')
 
