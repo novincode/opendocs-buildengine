@@ -1,0 +1,6 @@
+name = "opendocs-kv-uploader"
+compatibility_date = "2024-04-18"
+
+[[kv_namespaces]]
+binding = "OPENDOCS"
+id = "bbfeae61708c4f9987e54929f18b9332" # Get this from Cloudflare dashboard

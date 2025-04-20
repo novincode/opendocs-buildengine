@@ -70,6 +70,7 @@
     "shadcn-ui": "^0.9.5",
     "tailwindcss": "^4.1.4",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "wrangler": "^4.12.0"
   }
 }

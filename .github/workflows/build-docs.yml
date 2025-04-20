@@ -43,6 +43,18 @@ jobs:
       - name: Build docs
         run: pnpm build
 
+      - name: Upload HTML files to Cloudflare KV
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          echo "🔍 Scanning built HTML files in htmlrepo/${DOCS_REPO}"
+
+          find htmlrepo/${DOCS_REPO} -name "*.html" | while read file; do
+            key=${file#htmlrepo/} # strip 'htmlrepo/' to get relative key
+            echo "📤 Uploading $key ..."
+            pnpm exec wrangler kv:key put "$key" "$(cat "$file")" --binding=OPENDOCS
+          done
+
       - name: Configure git
         run: |
           git config --global user.name "github-actions[bot]"
