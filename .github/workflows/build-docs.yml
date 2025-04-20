@@ -52,7 +52,7 @@ jobs:
           find htmlrepo/${DOCS_REPO} -name "*.html" | while read file; do
             key=${file#htmlrepo/} # strip 'htmlrepo/' to get relative key
             echo "📤 Uploading $key ..."
-            pnpm exec wrangler kv:key put "$key" "$(cat "$file")" --binding=OPENDOCS
+            pnpm exec wrangler kv key put "$key" "$(cat "$file")" --binding=OPENDOCS
           done
 
       - name: Configure git
