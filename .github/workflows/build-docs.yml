@@ -43,16 +43,28 @@ jobs:
       - name: Build docs
         run: pnpm build
 
-      - name: Upload HTML files to Cloudflare KV
+      - name: Upload HTML files to Cloudflare KV via API
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          CLOUDFLARE_NAMESPACE_ID: ${{ secrets.CF_NAMESPACE_ID }}
         run: |
           echo "🔍 Scanning built HTML files in htmlrepo/${DOCS_REPO}"
 
+          ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID}"
+          NAMESPACE_ID="${CLOUDFLARE_NAMESPACE_ID}"
+
           find htmlrepo/${DOCS_REPO} -name "*.html" | while read file; do
-            key=${file#htmlrepo/} # strip 'htmlrepo/' to get relative key
+            key=${file#htmlrepo/} # strip htmlrepo/ prefix
+            safe_key=$(echo "$key" | sed 's/ /%20/g; s/\//%2F/g; s/\"/%22/g; s/#/%23/g; s/?/%3F/g')
+
             echo "📤 Uploading $key ..."
-            pnpm exec wrangler kv key put "$key" "$(cat "$file")" --binding=OPENDOCS
+
+            curl -s -X PUT "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/storage/kv/namespaces/$NAMESPACE_ID/values/$safe_key" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              --data-binary @"$file"
+
+            echo "✅ Uploaded $key"
           done
 
       - name: Configure git
