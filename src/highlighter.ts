@@ -85,6 +85,8 @@ export function highlightCode({
         theme.includes('black') ||
         theme === 'dracula' ||
         theme === 'nord';
+    
+    const themeClass = isDarkTheme ? 'shiki-dark' : 'shiki-light';
 
     // Convert annotations to a map for easy lookup
     const annotationMap: Record<number, { message: string, style?: string }> = {};
@@ -159,53 +161,8 @@ export function highlightCode({
             transformers
         });
 
-        const styles = `
-        .shiki .line { display: block; }
-        .shiki code { display: flex; flex-direction: column; }
-        ${isDarkTheme ? `
-          .highlighted-line { background-color: rgba(255, 255, 0, 0.15); border-left: 3px solid rgba(255, 255, 0, 0.5); }
-          .focus-line { background-color: rgba(58, 130, 247, 0.15); border-left: 3px solid rgba(58, 130, 247, 0.5); }
-          .line-number { color: rgba(255, 255, 255, 0.5); font-size: 0.8em; margin-right: 10px; }
-          .annotation { color: rgba(255, 255, 255, 0.7); font-style: italic; margin-left: 8px; padding: 0 4px; }
-          .annotation-info { background-color: rgba(58, 130, 247, 0.6); color: #fff; padding: 2px 4px; border-radius: 3px; }
-          .annotation-warning { background-color: rgba(255, 152, 0, 0.6); color: #fff; padding: 2px 4px; border-radius: 3px; }
-          .annotation-error { background-color: rgba(244, 67, 54, 0.6); color: #fff; padding: 2px 4px; border-radius: 3px; }
-          .word-highlight {
-            background: rgba(120,130,150,0.22);
-            color: #fff;
-            border-radius: 4px;
-            padding: 1px 4px;
-            font-weight: 500;
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.04);
-            transition: background 0.2s;
-          }
-        ` : `
-          .highlighted-line { background-color: rgba(255, 213, 0, 0.1); border-left: 3px solid rgba(255, 213, 0, 0.7); }
-          .focus-line { background-color: rgba(33, 150, 243, 0.1); border-left: 3px solid rgba(33, 150, 243, 0.7); }
-          .line-number { color: rgba(0, 0, 0, 0.5); font-size: 0.8em; margin-right: 10px; }
-          .annotation { color: rgba(0, 0, 0, 0.7); font-style: italic; margin-left: 8px; padding: 0 4px; }
-          .annotation-info { background-color: rgba(33, 150, 243, 0.15); color: #0d47a1; padding: 2px 4px; border-radius: 3px; }
-          .annotation-warning { background-color: rgba(255, 152, 0, 0.15); color: #e65100; padding: 2px 4px; border-radius: 3px; }
-          .annotation-error { background-color: rgba(244, 67, 54, 0.15); color: #b71c1c; padding: 2px 4px; border-radius: 3px; }
-          .word-highlight {
-            background: rgba(120,130,150,0.13);
-            color: #222;
-            border-radius: 4px;
-            padding: 1px 4px;
-            font-weight: 500;
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
-            transition: background 0.2s;
-          }
-        `}
-      `;
-
-        if (html.includes('<style>')) {
-            html = html.replace(/<style>([\s\S]*?)<\/style>/, (match, p1) => {
-                return `<style>${p1}${styles}</style>`;
-            });
-        } else {
-            html = `<style>${styles}</style>` + html;
-        }
+        // Add the theme class to the pre tag
+        html = html.replace('<pre class="shiki', `<pre class="shiki ${themeClass}`);
 
         return html;
     } catch (error) {
